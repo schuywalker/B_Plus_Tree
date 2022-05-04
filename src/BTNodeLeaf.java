@@ -39,19 +39,50 @@ class BTNodeLeaf extends BTNode
 
             else if (word.compareTo(keys.get(i).getKey()) < 1 && word.compareTo(keys.get(i-1).getKey()) > 1) {
                keys.add(i, new Word(word)); // found correct position, insert in middle
+               break;
             }
          }
       }
 
       // split operations
       if (keys.size() > tree.n) {
-         if (this.parent == null) {
+            int splitPoint = (int)Math.ceil(keys.size()/2);
+            // ^ always 4/2 = 2 for our purposes. would be relevant if n is odd
+
+         if (this.parent == null) { // only occurs on first split
 
 
+            BTNodeInternal newRoot = new BTNodeInternal();
+            BTNodeLeaf rightLeaf = new BTNodeLeaf();
+
+            newRoot.insert(this.keys.get(splitPoint).key, tree);
+
+            this.nextLeaf = rightLeaf;
+
+            newRoot.children.add(this);
+            this.parent = newRoot;
+
+            newRoot.children.add(rightLeaf);
+            rightLeaf.parent = newRoot;
+
+            while (keys.size() > splitPoint) { // while size > 2, remove 3rd element. more efficient this way.
+               Word temp = keys.remove(splitPoint);
+               rightLeaf.keys.add(0,temp);
+            }
 
          }
          else {
 
+
+            if (word.compareTo(this.keys.get(splitPoint).key) >= 0) { // word got inserted on right side
+               // add right
+            }
+            else {
+
+
+            }
+
+            //
 
 
          }

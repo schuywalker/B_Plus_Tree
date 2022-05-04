@@ -5,14 +5,13 @@ class BPlusTree
    BTNode root;
    private int nextNodeID; //An ID is given to a node; this is only for display purpose; we can easily see all the keys within the same node.
    private final Set ignoreTable;
-   public final int n;
+   public final int n = 3;
    
    public BPlusTree(Set ignoreSet)
    {
       root = new BTNodeLeaf();
       nextNodeID = 1;
       ignoreTable = ignoreSet;
-      n = 3;
    }
    
    public int assignNodeID()

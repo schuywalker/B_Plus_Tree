@@ -4,6 +4,7 @@ import java.util.ArrayList;
 class BTNodeInternal extends BTNode
 {
    ArrayList<BTNode> children;
+   ArrayList<String> indexWords;
    
    public BTNodeInternal() 
    {
@@ -12,7 +13,28 @@ class BTNodeInternal extends BTNode
    
    public void insert(String key, BPlusTree tree)
    {
-      
+      if (indexWords.size() == 0) {
+         indexWords.add(key); // add first word. only happens on first insert. can remove later for efficiency.
+      }
+      else if (indexWords.contains(key)){
+         // indexWords.indexOf(key)
+         // increment below? probably not since this will likely only be called from leaf nodes which increment it themselves
+      }
+      else if(key.compareTo(indexWords.get(indexWords.size()-1)) > 1) {
+         indexWords.add(key); // add to end
+      }
+      else if (keys.size() == 1 && key.compareTo(indexWords.get(0)) < 0) {
+         indexWords.add(0, key); // add to 0th
+      }
+      else {
+         for (int i = keys.size()-1; i >= 1; i--) {
+
+             if (key.compareTo(indexWords.get(i)) < 1 && key.compareTo(indexWords.get(i-1)) > 1) {
+               indexWords.add(key); // found correct position, insert in middle
+               break;
+             }
+         }
+      }
    }
    
    public void printLeavesInSequence()
@@ -66,24 +88,6 @@ class BTNodeInternal extends BTNode
          return children.get(0).searchWord(word);
 
       }
-
-//      for (int i = 0; i < children.size(); i++) {
-//
-//         if (children.get(i).getClass() == BTNodeInternal.class) {
-//            // child is internal. compare will not return 0.
-//            BTNodeInternal child = (BTNodeInternal)children.get(i);
-//            if   child.children.size() == 0  && wont happen
-//
-//         }
-//
-//
-//
-//
-//                ((BTNodeInternal) child).children.get(0).toString()) < 0) {
-//            return searchWord(((BTNodeInternal) child).children.get(i).toString());
-//         }
-//         else if ()
-//      }
 
 
    }
