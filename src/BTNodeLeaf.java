@@ -26,7 +26,7 @@ class BTNodeLeaf extends BTNode
          keys.add(new Word(word)); // add first word. only happens on first insert. can remove later for efficiency.
          this.setNodeId(tree.wordCount / 2);
       }
-      else if(word.compareTo(keys.get(keys.size()-1).getKey()) > 1) {
+      else if(word.compareTo(keys.get(keys.size()-1).getKey()) > 0) {
          keys.add(new Word(word)); // add to end
       }
       else if (word.compareTo(keys.get(0).getKey()) < 0) {
@@ -87,7 +87,7 @@ class BTNodeLeaf extends BTNode
             left most word will be the one also in parent's children list, unless this is the left most child.
             Thus we initialize position to 0, and only change if this is not the left most child.
              */
-            int positionInParentsChildrenList = 0; // wrong, init to 1, because even if 0, we wanna insert after that
+            int positionInParentsChildrenList = 0;
 
             // insert right sibling into parents children. must find correct position to do so.
             // cant use contains because it considers 'window' to contain 'wind'

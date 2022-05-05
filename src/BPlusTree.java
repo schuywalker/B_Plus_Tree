@@ -34,7 +34,9 @@ class BPlusTree
          // increase frequency, ret
          return false;
       }
-      
+      if (word.equals("words")){
+         root.printStructureWKeys();
+      }
       root.insert(word, this, 0);
       
       //Update root if tree grows

@@ -59,7 +59,7 @@ class BTNodeInternal extends BTNode
       if (indexWords.size() == 0) {
          indexWords.add(key); // add first word. only happens on first insert. can remove later for efficiency.
       }
-      else if(key.compareTo(indexWords.get(indexWords.size()-1)) > 1) {
+      else if(key.compareTo(indexWords.get(indexWords.size()-1)) > 0) {
          indexWords.add(key); // add to end
       }
       else if (key.compareTo(indexWords.get(0)) < 0) {
@@ -67,7 +67,7 @@ class BTNodeInternal extends BTNode
       }
       else {
          for (int i = indexWords.size()-1; i >= 1; i--) {
-            if (key.compareTo(indexWords.get(i)) < 1 && key.compareTo(indexWords.get(i-1)) > 1) {
+            if (key.compareTo(indexWords.get(i)) < 0 && key.compareTo(indexWords.get(i-1)) > 0) {
                indexWords.add(i, key); // found correct position, insert in middle
                break;
             }
@@ -81,7 +81,7 @@ class BTNodeInternal extends BTNode
 //      }
 
       if (this.children.size() > 5){
-         System.out.println("children bug");
+         System.out.println("children bug on "+key);
       }
 
       // check for overflow, if so, move up
