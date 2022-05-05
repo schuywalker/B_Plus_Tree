@@ -43,6 +43,11 @@ class BTNodeInternal extends BTNode
          }
       }
       this.printLeavesInSequence();
+
+   }
+
+   public void receiveCopyUp(String word, BPlusTree tree){
+
    }
    
    public void printLeavesInSequence()

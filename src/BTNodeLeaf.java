@@ -16,18 +16,7 @@ class BTNodeLeaf extends BTNode
    public void insert(String word, BPlusTree tree)
    {
 
-      // find correct position, insert key
-      if (keys.toString().contains(word)){
-         for (int i = 0; i < keys.size(); i++) {
-            if (keys.get(i).key.equals(word)){
-               keys.get(i).incKeyCount();
-               System.out.println("YAHOOOOOOOO");
-               break;
-            }
-         }
-      }
-
-      else if (keys.size() == 0) {
+      if (keys.size() == 0) {
          keys.add(new Word(word)); // add first word. only happens on first insert. can remove later for efficiency.
          this.setNodeId(tree.wordCount / 2);
       }
@@ -78,7 +67,7 @@ class BTNodeLeaf extends BTNode
 
             rightLeaf.setNodeId(parent.nodeID - this.nodeID);
 
-            this.copyUp(splitPoint, tree);
+            this.copyUp(keys.get(splitPoint).key, tree);
 
 
 
@@ -107,8 +96,8 @@ class BTNodeLeaf extends BTNode
 
    }
 
-   public void copyUp(int wordPosition, BPlusTree tree){
-      this.parent.insert(this.keys.get(wordPosition).key, tree);
+   public void copyUp(String word, BPlusTree tree){
+      this.parent.receiveCopyUp(word, tree);
    }
    
    public void printLeavesInSequence()
