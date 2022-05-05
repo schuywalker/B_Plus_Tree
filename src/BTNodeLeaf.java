@@ -16,6 +16,12 @@ class BTNodeLeaf extends BTNode
    public void insert(String word, BPlusTree tree)
    {
 
+      // used later to find position in parent's children array
+      String originalLeftMostKey = "";
+      if (keys.size() > 0) {
+         originalLeftMostKey = keys.get(0).key;
+      }
+
       if (keys.size() == 0) {
          keys.add(new Word(word)); // add first word. only happens on first insert. can remove later for efficiency.
          this.setNodeId(tree.wordCount / 2);
@@ -42,7 +48,7 @@ class BTNodeLeaf extends BTNode
             }
          }
       }
-      this.printLeavesInSequence();
+
 
       // split operations
       if (keys.size() > tree.n) {
@@ -51,53 +57,76 @@ class BTNodeLeaf extends BTNode
 
          if (this.parent == null) { // only occurs on first split
 
-
+            // make parent and sibling
             BTNodeInternal newRoot = new BTNodeInternal(this.nodeID);
-
-
-            this.setNodeId(this.nodeID/2);
-
             BTNodeLeaf rightLeaf = new BTNodeLeaf();
-            this.nextLeaf = rightLeaf;
 
+            // parent / child pointers
             newRoot.children.add(this);
-            this.parent = newRoot;
             newRoot.children.add(rightLeaf);
+            this.parent = newRoot;
             rightLeaf.parent = newRoot;
 
+            // set IDs - needs work!!!!!!!!!!!!!!!!!!!!!
+            this.setNodeId(this.nodeID/2);
             rightLeaf.setNodeId(parent.nodeID - this.nodeID);
 
-            this.copyUp(keys.get(splitPoint).key, tree);
 
-
-
-            while (keys.size() > splitPoint) { // while size > 2, remove 3rd element. more efficient this way.
-               Word temp = keys.remove(splitPoint);
-               rightLeaf.keys.add(0,temp);
-            }
+            // split calls copy up
+            this.split(splitPoint, rightLeaf, tree);
 
          }
-         else {
+         else { // parent is not null - called every time after first
 
+            // create right node to split to
+            BTNodeLeaf rightLeaf = new BTNodeLeaf();
+            rightLeaf.parent = this.parent;
 
-            if (word.compareTo(this.keys.get(splitPoint).key) >= 0) { // word got inserted on right side
-               // add right
+            /*
+            figure out where to insert in parent's children list.
+            left most word will be the one also in parent's children list, unless this is the left most child.
+            Thus we initialize position to 0, and only change if this is not the left most child.
+             */
+            int positionInParentsChildrenList = 0;
+
+            // insert right sibling into parents children. must find correct position to do so.
+            // cant use contains because it considers 'window' to contain 'wind'
+            for (int i = parent.indexWords.size()-1; i >= 0; i--) {
+               if (parent.indexWords.get(i).equals(originalLeftMostKey)) {
+                  positionInParentsChildrenList = i + 1;
+               }
             }
-            else {
+            // does adding index 3 to an array of 0,1,2 cause outOfBounds?
+            parent.children.add(positionInParentsChildrenList, rightLeaf);
 
 
-            }
-
-            //
-
+            // split calls copy up
+            this.split(splitPoint, rightLeaf, tree);
 
          }
       }
 
    }
+   public void split(int splitPoint, BTNodeLeaf rightLeaf, BPlusTree tree){
+      // set nextLeaf pointers
+      if (this.nextLeaf != null) {
+         rightLeaf.nextLeaf = this.nextLeaf;
+      }
+      this.nextLeaf = rightLeaf;
+
+      // move Word half of word objects over to rightLeaf
+      while (keys.size() > splitPoint) { // while size > 2, remove 3rd element. more efficient this way.
+         Word temp = keys.remove(splitPoint);
+//               rightLeaf.keys.add(0,temp);
+         rightLeaf.keys.add(temp);
+      }
+
+      // COPY UP
+      this.copyUp(rightLeaf.keys.get(0).key, tree);
+   }
 
    public void copyUp(String word, BPlusTree tree){
-      this.parent.receiveCopyUp(word, tree);
+      this.parent.receiveUp(word, tree);
    }
    
    public void printLeavesInSequence()
