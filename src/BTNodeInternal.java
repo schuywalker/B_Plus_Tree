@@ -19,7 +19,7 @@ class BTNodeInternal extends BTNode
    }
 
    // Done
-   public void insert(String key, BPlusTree tree)
+   public void insert(String key, BPlusTree tree, int count)
    {
       /*
       insert doesn't actually insert a key.
@@ -33,8 +33,13 @@ class BTNodeInternal extends BTNode
             break;
          }
       }
+      count++;
+      if (count > 5){
+         System.out.println("woah");
+         throw new StackOverflowError("parent calling child or dup nodes?");
+      }
 
-      children.get(position).insert(key, tree);
+      children.get(position).insert(key, tree, count);
    }
 
    // Done
@@ -55,12 +60,11 @@ class BTNodeInternal extends BTNode
       else if(key.compareTo(indexWords.get(indexWords.size()-1)) > 1) {
          indexWords.add(key); // add to end
       }
-      else if (indexWords.size() == 1 && key.compareTo(indexWords.get(0)) < 0) {
+      else if (key.compareTo(indexWords.get(0)) < 0) {
          indexWords.add(0, key); // add to 0th
       }
       else {
          for (int i = indexWords.size()-1; i >= 1; i--) {
-
             if (key.compareTo(indexWords.get(i)) < 1 && key.compareTo(indexWords.get(i-1)) > 1) {
                indexWords.add(key); // found correct position, insert in middle
                break;

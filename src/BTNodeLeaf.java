@@ -13,7 +13,7 @@ class BTNodeLeaf extends BTNode
       keys = new ArrayList<Word>();
    }
    
-   public void insert(String word, BPlusTree tree)
+   public void insert(String word, BPlusTree tree, int count)
    {
 
       // used later to find position in parent's children array
@@ -29,7 +29,7 @@ class BTNodeLeaf extends BTNode
       else if(word.compareTo(keys.get(keys.size()-1).getKey()) > 1) {
          keys.add(new Word(word)); // add to end
       }
-      else if (keys.size() == 1 && word.compareTo(keys.get(0).getKey()) < 0) {
+      else if (word.compareTo(keys.get(0).getKey()) < 0) {
          keys.add(0, new Word(word)); // add to 0th
       }
       else if (keys.get(0).getKey().equals(word)){
@@ -42,7 +42,7 @@ class BTNodeLeaf extends BTNode
                return; // size hasnt changed. no need for other checks
             }
 
-            else if (word.compareTo(keys.get(i).getKey()) < 1 && word.compareTo(keys.get(i-1).getKey()) > 1) {
+            else if (word.compareTo(keys.get(i).getKey()) < 0 && word.compareTo(keys.get(i-1).getKey()) > 0) {
                keys.add(i, new Word(word)); // found correct position, insert in middle
                break;
             }
@@ -87,17 +87,17 @@ class BTNodeLeaf extends BTNode
             left most word will be the one also in parent's children list, unless this is the left most child.
             Thus we initialize position to 0, and only change if this is not the left most child.
              */
-            int positionInParentsChildrenList = 0;
+            int positionInParentsChildrenList = 0; // wrong, init to 1, because even if 0, we wanna insert after that
 
             // insert right sibling into parents children. must find correct position to do so.
             // cant use contains because it considers 'window' to contain 'wind'
             for (int i = parent.indexWords.size()-1; i >= 0; i--) {
                if (parent.indexWords.get(i).equals(originalLeftMostKey)) {
-                  positionInParentsChildrenList = i + 1;
+                  positionInParentsChildrenList = i;
                }
             }
             // does adding index 3 to an array of 0,1,2 cause outOfBounds?
-            parent.children.add(positionInParentsChildrenList, rightLeaf);
+            parent.children.add(positionInParentsChildrenList + 1, rightLeaf);
 
 
             // split calls copy up

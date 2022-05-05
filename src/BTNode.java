@@ -8,8 +8,8 @@ abstract class BTNode
    
    public BTNodeInternal getParent() { return parent; }
    
-   public abstract void insert(String key, BPlusTree tree);
-      
+   public abstract void insert(String key, BPlusTree tree, int count);
+
    public abstract void printLeavesInSequence();
       
    public abstract void printStructureWKeys();
