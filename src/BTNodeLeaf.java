@@ -93,11 +93,17 @@ class BTNodeLeaf extends BTNode
             // cant use contains because it considers 'window' to contain 'wind'
             for (int i = parent.indexWords.size()-1; i >= 0; i--) {
                if (parent.indexWords.get(i).equals(originalLeftMostKey)) {
-                  positionInParentsChildrenList = i;
+                  positionInParentsChildrenList = i + 1; // correspond children index will be 1 greater than indexWords index
+                  break;
                }
             }
-            // does adding index 3 to an array of 0,1,2 cause outOfBounds?
+            if (positionInParentsChildrenList + 1 >= parent.children.size()){
+               parent.children.add(rightLeaf); // avoid index out of bounds exception
+            }
+            else {
             parent.children.add(positionInParentsChildrenList + 1, rightLeaf);
+            // + 1 again to add after
+            }
 
 
             // split calls copy up
@@ -140,7 +146,14 @@ class BTNodeLeaf extends BTNode
    
    public void printStructureWKeys()
    {
-      
+
+   }
+   public void printStructureWKeys(String tabs)
+   {
+      tabs += "\t\t\t";
+      for (int i = keys.size()-1; i >= 0; i--){
+         System.out.println(tabs+"- "+keys.get(i).key+": "+keys.get(i).keyCount);
+      }
    }
    
    public Boolean rangeSearch(String startWord, String endWord)

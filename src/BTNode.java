@@ -13,6 +13,7 @@ abstract class BTNode
    public abstract void printLeavesInSequence();
       
    public abstract void printStructureWKeys();
+   public abstract void printStructureWKeys(String tabs);
    
    public abstract Boolean rangeSearch(String startWord, String endWord);
    

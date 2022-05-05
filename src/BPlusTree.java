@@ -41,6 +41,7 @@ class BPlusTree
       if(root.getParent() != null)
       {
          root = root.getParent();
+         root.printStructureWKeys();
       }
       
       return true;

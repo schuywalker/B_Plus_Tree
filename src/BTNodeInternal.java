@@ -38,7 +38,9 @@ class BTNodeInternal extends BTNode
          System.out.println("woah");
          throw new StackOverflowError("parent calling child or dup nodes?");
       }
-
+      if (position == children.size()) {
+         children.get(position).insert(key, tree, count);
+      }
       children.get(position).insert(key, tree, count);
    }
 
@@ -66,14 +68,20 @@ class BTNodeInternal extends BTNode
       else {
          for (int i = indexWords.size()-1; i >= 1; i--) {
             if (key.compareTo(indexWords.get(i)) < 1 && key.compareTo(indexWords.get(i-1)) > 1) {
-               indexWords.add(key); // found correct position, insert in middle
+               indexWords.add(i, key); // found correct position, insert in middle
                break;
             }
          }
       }
-      this.printLeavesInSequence();
-      for (BTNode c : children){
-         c.printLeavesInSequence();
+
+
+//      this.printLeavesInSequence();
+//      for (BTNode c : children){
+//         c.printLeavesInSequence();
+//      }
+
+      if (this.children.size() > 5){
+         System.out.println("children bug");
       }
 
       // check for overflow, if so, move up
@@ -82,6 +90,7 @@ class BTNodeInternal extends BTNode
          this.moveUp(tree);
 
       }
+
    }
 
    // Not done, moving children over ~ 112
@@ -102,13 +111,13 @@ class BTNodeInternal extends BTNode
          // make parent, set IDs
          BTNodeInternal newRoot = new BTNodeInternal(this.nodeID);
          this.setNodeId((this.nodeID/2)-1);
-         BTNodeInternal rightSibling = new BTNodeInternal((this.nodeID/2)+1);
+         BTNodeInternal rightSibling = new BTNodeInternal((this.nodeID*2)+1);
 
          // set up parent/ child pointers
          this.parent = newRoot;
          rightSibling.parent = newRoot;
          newRoot.children.add(this);
-         newRoot.children.add(newRoot);
+         newRoot.children.add(rightSibling);
 
          // split calls receive up
          this.split(splitPoint, rightSibling, tree);
@@ -141,17 +150,19 @@ class BTNodeInternal extends BTNode
 
    public void split(int splitPoint, BTNodeInternal rightSibling, BPlusTree tree){
       // move indexWords over (Strings)
-      while (indexWords.size() > splitPoint) { // with n = 3, node has 4, move right 2 over
-         String temp = indexWords.remove(splitPoint);
+      while (this.indexWords.size() > splitPoint) { // with n = 3, node has 4, move right 2 over
+         String temp = this.indexWords.remove(splitPoint);
          rightSibling.indexWords.add(temp);
       }
 
       // move children over
       // in n=3, we should have 5 children when splitting, and the rightmost 2 children should move over
-      int childrenSplitPoint = (int)Math.ceil(children.size()/2);
+//      int childrenSplitPoint = (int)Math.ceil(children.size()/2); // evald to 2??
+      int childrenSplitPoint = (children.size()+1)/2;
       while (children.size() > childrenSplitPoint) {
          BTNode temp = children.remove(childrenSplitPoint);
          rightSibling.children.add(temp);
+         temp.parent = rightSibling;
       }
 
       parent.receiveUp(rightSibling.indexWords.remove(0), tree);
@@ -159,7 +170,7 @@ class BTNodeInternal extends BTNode
    
    public void printLeavesInSequence()
    {
-      System.out.print("internal "+this.nodeID+": ");
+      System.out.print("\ninternal "+this.nodeID+": ");
       for (String s : indexWords) {
       System.out.print(s + "  ");
       }
@@ -169,7 +180,27 @@ class BTNodeInternal extends BTNode
    
    public void printStructureWKeys()
    {
-      
+      System.out.println("Print structure:");
+      for (int i = indexWords.size()-1; i >= 0; i--){
+
+         children.get(i+1).printStructureWKeys("");
+
+         System.out.print(" - "+nodeID+": "+indexWords.get(i)+"\n");
+
+      }
+
+         children.get(0).printStructureWKeys("");
+
+      System.out.println("\n");
+   }
+   public void printStructureWKeys(String tabs){
+      tabs += "\t\t\t";
+      for (int i = indexWords.size()-1; i >= 0; i--) {
+         children.get(i+1).printStructureWKeys(tabs);
+
+         System.out.print(tabs+" / "+nodeID+": "+indexWords.get(i)+"\n");
+      }
+      children.get(0).printStructureWKeys(tabs);
    }
    
    public Boolean rangeSearch(String startWord, String endWord)
