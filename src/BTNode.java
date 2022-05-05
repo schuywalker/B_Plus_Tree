@@ -17,6 +17,10 @@ abstract class BTNode
    public abstract Boolean rangeSearch(String startWord, String endWord);
    
    public abstract Boolean searchWord(String word);
+
+   public void setNodeId(int nodeId){
+      this.nodeID = nodeId;
+   }
 }
 /* INSERTION
 • Find correct leaf page L.

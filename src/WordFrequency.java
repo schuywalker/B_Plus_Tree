@@ -59,6 +59,7 @@ class WordFrequency
          document = Jsoup.connect(args[0]).get();
          doc_text = document.text();
          tokenized_text = doc_text.split("(\\W+)?\\s(\\W+)?");
+         tree.setWordCount(tokenized_text.length);
       }
       catch(Exception e)
       {

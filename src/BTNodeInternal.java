@@ -8,7 +8,14 @@ class BTNodeInternal extends BTNode
    
    public BTNodeInternal() 
    {
-
+      children = new ArrayList<BTNode>();
+      indexWords = new ArrayList<String>();
+   }
+   public BTNodeInternal(int nodeID)
+   {
+      children = new ArrayList<BTNode>();
+      indexWords = new ArrayList<String>();
+      this.nodeID = nodeID;
    }
    
    public void insert(String key, BPlusTree tree)
@@ -23,11 +30,11 @@ class BTNodeInternal extends BTNode
       else if(key.compareTo(indexWords.get(indexWords.size()-1)) > 1) {
          indexWords.add(key); // add to end
       }
-      else if (keys.size() == 1 && key.compareTo(indexWords.get(0)) < 0) {
+      else if (indexWords.size() == 1 && key.compareTo(indexWords.get(0)) < 0) {
          indexWords.add(0, key); // add to 0th
       }
       else {
-         for (int i = keys.size()-1; i >= 1; i--) {
+         for (int i = indexWords.size()-1; i >= 1; i--) {
 
              if (key.compareTo(indexWords.get(i)) < 1 && key.compareTo(indexWords.get(i-1)) > 1) {
                indexWords.add(key); // found correct position, insert in middle
@@ -35,11 +42,17 @@ class BTNodeInternal extends BTNode
              }
          }
       }
+      this.printLeavesInSequence();
    }
    
    public void printLeavesInSequence()
    {
-      
+      System.out.print("internal "+this.nodeID+": ");
+      for (String s : indexWords) {
+      System.out.print(s + "  ");
+      }
+      System.out.println();
+
    }
    
    public void printStructureWKeys()

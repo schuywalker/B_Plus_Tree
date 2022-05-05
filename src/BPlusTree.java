@@ -6,12 +6,17 @@ class BPlusTree
    private int nextNodeID; //An ID is given to a node; this is only for display purpose; we can easily see all the keys within the same node.
    private final Set ignoreTable;
    public final int n = 3;
+   public int wordCount = 0;
    
    public BPlusTree(Set ignoreSet)
    {
       root = new BTNodeLeaf();
       nextNodeID = 1;
       ignoreTable = ignoreSet;
+   }
+
+   public void setWordCount(int wordCount) {
+      this.wordCount =  wordCount;
    }
    
    public int assignNodeID()

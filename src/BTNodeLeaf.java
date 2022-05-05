@@ -10,16 +10,26 @@ class BTNodeLeaf extends BTNode
 
    public BTNodeLeaf()
    {
-      
+      keys = new ArrayList<Word>();
    }
    
    public void insert(String word, BPlusTree tree)
    {
 
       // find correct position, insert key
+      if (keys.toString().contains(word)){
+         for (int i = 0; i < keys.size(); i++) {
+            if (keys.get(i).key.equals(word)){
+               keys.get(i).incKeyCount();
+               System.out.println("YAHOOOOOOOO");
+               break;
+            }
+         }
+      }
 
-      if (keys.size() == 0) {
+      else if (keys.size() == 0) {
          keys.add(new Word(word)); // add first word. only happens on first insert. can remove later for efficiency.
+         this.setNodeId(tree.wordCount / 2);
       }
       else if(word.compareTo(keys.get(keys.size()-1).getKey()) > 1) {
          keys.add(new Word(word)); // add to end
@@ -43,6 +53,7 @@ class BTNodeLeaf extends BTNode
             }
          }
       }
+      this.printLeavesInSequence();
 
       // split operations
       if (keys.size() > tree.n) {
@@ -52,18 +63,24 @@ class BTNodeLeaf extends BTNode
          if (this.parent == null) { // only occurs on first split
 
 
-            BTNodeInternal newRoot = new BTNodeInternal();
+            BTNodeInternal newRoot = new BTNodeInternal(this.nodeID);
+
+
+            this.setNodeId(this.nodeID/2);
+
             BTNodeLeaf rightLeaf = new BTNodeLeaf();
-
-            newRoot.insert(this.keys.get(splitPoint).key, tree);
-
             this.nextLeaf = rightLeaf;
 
             newRoot.children.add(this);
             this.parent = newRoot;
-
             newRoot.children.add(rightLeaf);
             rightLeaf.parent = newRoot;
+
+            rightLeaf.setNodeId(parent.nodeID - this.nodeID);
+
+            this.copyUp(splitPoint, tree);
+
+
 
             while (keys.size() > splitPoint) { // while size > 2, remove 3rd element. more efficient this way.
                Word temp = keys.remove(splitPoint);
@@ -89,10 +106,18 @@ class BTNodeLeaf extends BTNode
       }
 
    }
+
+   public void copyUp(int wordPosition, BPlusTree tree){
+      this.parent.insert(this.keys.get(wordPosition).key, tree);
+   }
    
    public void printLeavesInSequence()
    {
-
+      System.out.print(this.nodeID+" ");
+      for (Word w : keys) {
+         System.out.print(w.key + "  ");
+      }
+      System.out.println();
    }
    
    public void printStructureWKeys()
