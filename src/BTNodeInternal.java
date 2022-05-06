@@ -203,20 +203,33 @@ class BTNodeInternal extends BTNode
       children.get(0).printStructureWKeys(tabs);
    }
    
-   public Boolean rangeSearch(String startWord, String endWord)
+   public Boolean rangeSearch(String startWord, String endWord, BPlusTree tree)
    {
+
+
+      if (startWord.compareTo(indexWords.get(indexWords.size()-1)) >= 0)
+      { // if we need to search in the right most child
+         children.get(children.size()-1).rangeSearch(startWord, endWord, tree);
+         // will return out of function
+      }
+      for (int i = 0; i < this.indexWords.size(); i++)
+      {
+         if (startWord.compareTo(indexWords.get(i)) < 0){
+            children.get(i).rangeSearch(startWord, endWord, tree);
+            break;
+         }
+      }
+
+
+
+
       return true;
    }
    
    public Boolean searchWord(String word)
    {
-//      if (children.size() == 0) {
-//         return false; // string
-//      } wont happen. node won't exist if it doesn't have a data record to point to below.
-//
 
-      if (children.get(0).getClass() == BTNodeInternal.class) {
-//            // child is internal. compare will not return 0.
+      if (children.get(0).getClass() == BTNodeInternal.class) { // child is internal. compare will not return 0.
          if (children.size() > 1) {
             for (int i = children.size() - 1; i >= 0; i--) {
                BTNodeInternal child = (BTNodeInternal) children.get(i);

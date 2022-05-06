@@ -150,14 +150,67 @@ class BTNodeLeaf extends BTNode
    }
    public void printStructureWKeys(String tabs)
    {
+
+         // delete later
+      if (this.nextLeaf == null) {
+         System.out.println("next is null");
+      }
+      else {
+      System.out.println("next 0th is " + this.nextLeaf.keys.get(0).key);
+      }
+
       tabs += "\t\t\t";
       for (int i = keys.size()-1; i >= 0; i--){
          System.out.println(tabs+"- "+keys.get(i).key+": "+keys.get(i).keyCount);
       }
    }
    
-   public Boolean rangeSearch(String startWord, String endWord)
+   public Boolean rangeSearch(String startWord, String endWord, BPlusTree tree)
    {
+      int i = 0;
+      String keyCursor = null;
+      BTNodeLeaf leafCursor = this;
+
+      for (i = 0; i < keys.size(); i++){
+         if (keys.get(i).key.compareTo(startWord) >= 0){
+//            keyCursor = keys.get(i).key;
+            break;
+         }
+      }
+      // print rest of this node
+      for (i = i; i < keys.size(); i++) {
+         keyCursor = keys.get(i).key;
+         if (keyCursor.compareTo(endWord) <= 0) {
+            System.out.println(keyCursor);
+         }
+         else {
+            return true;
+         }
+      }
+      // print all sibling nodes till keyCursor > endword
+      if (keyCursor == null){
+         keyCursor = this.nextLeaf.keys.get(0).key;
+         // occurs if break between nodes.
+         // i.e. this ends with computer. nextLeaf begins with create. startWord is crazy.
+      }
+
+      while (keyCursor.compareTo(endWord) <= 0) {
+//         System.out.println(keyCursor);
+
+        leafCursor = leafCursor.nextLeaf;
+        if (leafCursor == null) {
+           return true; // reached end of tree
+        }
+        for (int j = 0; j < leafCursor.keys.size(); j++) {
+           keyCursor = leafCursor.keys.get(j).key;
+           if (keyCursor.compareTo(endWord) <= 0) {
+              System.out.println(keyCursor);
+           }
+           else { // early stop w/in node
+              break;
+           }
+        }
+      }
       return true;
    }
    

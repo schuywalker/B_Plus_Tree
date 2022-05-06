@@ -15,7 +15,7 @@ abstract class BTNode
    public abstract void printStructureWKeys();
    public abstract void printStructureWKeys(String tabs);
    
-   public abstract Boolean rangeSearch(String startWord, String endWord);
+   public abstract Boolean rangeSearch(String startWord, String endWord, BPlusTree tree);
    
    public abstract Boolean searchWord(String word);
 

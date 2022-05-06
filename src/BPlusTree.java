@@ -34,16 +34,13 @@ class BPlusTree
          // increase frequency, ret
          return false;
       }
-      if (word.equals("words")){
-         root.printStructureWKeys();
-      }
+
       root.insert(word, this, 0);
       
       //Update root if tree grows
       if(root.getParent() != null)
       {
          root = root.getParent();
-         root.printStructureWKeys();
       }
       
       return true;
@@ -89,7 +86,7 @@ class BPlusTree
          endWord = swap;
       }
       
-      if(!root.rangeSearch(startWord, endWord))
+      if(!root.rangeSearch(startWord, endWord, this))
       {
          System.out.println("No words found in that range.");
       }
