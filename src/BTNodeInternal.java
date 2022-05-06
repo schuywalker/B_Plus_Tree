@@ -19,7 +19,7 @@ class BTNodeInternal extends BTNode
    }
 
    // Done
-   public void insert(String key, BPlusTree tree, int count)
+   public void insert(String key, BPlusTree tree)
    {
       /*
       insert doesn't actually insert a key.
@@ -33,15 +33,11 @@ class BTNodeInternal extends BTNode
             break;
          }
       }
-      count++;
-      if (count > 5){
-         System.out.println("woah");
-         throw new StackOverflowError("parent calling child or dup nodes?");
-      }
+
       if (position == children.size()) {
-         children.get(position).insert(key, tree, count);
+         children.get(position).insert(key, tree);
       }
-      children.get(position).insert(key, tree, count);
+      children.get(position).insert(key, tree);
    }
 
    // Done

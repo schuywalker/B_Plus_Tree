@@ -13,7 +13,7 @@ class BTNodeLeaf extends BTNode
       keys = new ArrayList<Word>();
    }
    
-   public void insert(String word, BPlusTree tree, int count)
+   public void insert(String word, BPlusTree tree)
    {
 
       // used later to find position in parent's children array
@@ -151,15 +151,14 @@ class BTNodeLeaf extends BTNode
    public void printStructureWKeys(String tabs)
    {
 
-         // delete later
-      if (this.nextLeaf == null) {
-         System.out.println("next is null");
-      }
-      else {
-      System.out.println("next 0th is " + this.nextLeaf.keys.get(0).key);
-      }
+//      if (this.nextLeaf == null) {
+//         System.out.println("next is null");
+//      }
+//      else {
+//      System.out.println("next 0th is " + this.nextLeaf.keys.get(0).key);
+//      }
 
-      tabs += "\t\t\t";
+      tabs += "\t\t";
       for (int i = keys.size()-1; i >= 0; i--){
          System.out.println(tabs+"- "+keys.get(i).key+": "+keys.get(i).keyCount);
       }

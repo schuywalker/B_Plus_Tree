@@ -35,7 +35,7 @@ class BPlusTree
          return false;
       }
 
-      root.insert(word, this, 0);
+      root.insert(word, this);
       
       //Update root if tree grows
       if(root.getParent() != null)

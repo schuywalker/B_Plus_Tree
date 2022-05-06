@@ -3,12 +3,12 @@ import java.util.ArrayList;
 abstract class BTNode
 {
    protected int nodeID;
-   protected ArrayList<String> keys;
+//   protected ArrayList<String> keys;
    protected BTNodeInternal parent;
    
    public BTNodeInternal getParent() { return parent; }
    
-   public abstract void insert(String key, BPlusTree tree, int count);
+   public abstract void insert(String key, BPlusTree tree);
 
    public abstract void printLeavesInSequence();
       
