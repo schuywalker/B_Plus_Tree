@@ -104,6 +104,9 @@ class BPlusTree
       {
          System.out.println("Word \"" + word + "\" not found.");
       }
+      else {
+         System.out.println("Word found!");
+      }
    }
    
    public void userInsertWord(Scanner kb)

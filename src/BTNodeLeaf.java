@@ -123,7 +123,6 @@ class BTNodeLeaf extends BTNode
       // move Word half of word objects over to rightLeaf
       while (keys.size() > splitPoint) { // while size > 2, remove 3rd element. more efficient this way.
          Word temp = keys.remove(splitPoint);
-//               rightLeaf.keys.add(0,temp);
          rightLeaf.keys.add(temp);
       }
 
@@ -137,11 +136,14 @@ class BTNodeLeaf extends BTNode
    
    public void printLeavesInSequence()
    {
-      System.out.print(this.nodeID+" ");
-      for (Word w : keys) {
-         System.out.print(w.key + "  ");
+      BTNodeLeaf cursor = this;
+      while (cursor != null) {
+         for (Word w : cursor.keys){
+            System.out.print(w.key + " ");
+         }
+         System.out.println();
+         cursor = cursor.nextLeaf;
       }
-      System.out.println();
    }
    
    public void printStructureWKeys()
@@ -151,11 +153,12 @@ class BTNodeLeaf extends BTNode
    public void printStructureWKeys(String tabs)
    {
 
+      // uncomment to print nextLeaf's
 //      if (this.nextLeaf == null) {
-//         System.out.println("next is null");
+//         System.out.println("\t\t\t\t\t\tnext is null");
 //      }
 //      else {
-//      System.out.println("next 0th is " + this.nextLeaf.keys.get(0).key);
+//      System.out.println("\t\t\t\t\t\tnext 0th is " + this.nextLeaf.keys.get(0).key);
 //      }
 
       tabs += "\t\t";

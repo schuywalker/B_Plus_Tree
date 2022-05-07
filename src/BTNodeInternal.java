@@ -18,7 +18,6 @@ class BTNodeInternal extends BTNode
       this.nodeID = nodeID;
    }
 
-   // Done
    public void insert(String key, BPlusTree tree)
    {
       /*
@@ -40,7 +39,6 @@ class BTNodeInternal extends BTNode
       children.get(position).insert(key, tree);
    }
 
-   // Done
    public void receiveUp(String key, BPlusTree tree){
       /*
       This method actually inserts a word into the node (insert does not).
@@ -71,15 +69,6 @@ class BTNodeInternal extends BTNode
       }
 
 
-//      this.printLeavesInSequence();
-//      for (BTNode c : children){
-//         c.printLeavesInSequence();
-//      }
-
-      if (this.children.size() > 5){
-         System.out.println("children bug on "+key);
-      }
-
       // check for overflow, if so, move up
       if (indexWords.size() > tree.n){
 
@@ -89,7 +78,6 @@ class BTNodeInternal extends BTNode
 
    }
 
-   // Not done, moving children over ~ 112
    public void moveUp(BPlusTree tree) {
       /* this is the 'internal node overflow handler'.
        in case of n=3, means we're removing 3rd word, moving it to parent, and
@@ -166,12 +154,7 @@ class BTNodeInternal extends BTNode
    
    public void printLeavesInSequence()
    {
-      System.out.print("\ninternal "+this.nodeID+": ");
-      for (String s : indexWords) {
-      System.out.print(s + "  ");
-      }
-      System.out.println();
-
+      children.get(0).printLeavesInSequence();
    }
    
    public void printStructureWKeys()
@@ -224,15 +207,12 @@ class BTNodeInternal extends BTNode
    
    public Boolean searchWord(String word)
    {
-
       if (children.get(0).getClass() == BTNodeInternal.class) { // child is internal. compare will not return 0.
-         if (children.size() > 1) {
-            for (int i = children.size() - 1; i >= 0; i--) {
-               BTNodeInternal child = (BTNodeInternal) children.get(i);
-               int compare = word.compareTo(child.children.get(0).toString());
-               if (compare > 0) { // if words exists, it's to the right of this node
-                  return child.searchWord(word);
-               }
+         for (int i = children.size() - 1; i >= 0; i--) {
+            BTNodeInternal child = (BTNodeInternal) children.get(i);
+            int compare = word.compareTo(child.indexWords.get(0));
+            if (compare > 0) { // if words exists, it's to the right of this node
+               return child.searchWord(word);
             }
          }
          BTNodeInternal child = (BTNodeInternal) children.get(0);
@@ -240,7 +220,6 @@ class BTNodeInternal extends BTNode
       }
 
       else { // child is leaf node
-         if (children.size() > 1) {
             for (int i = children.size() - 1; i >= 0; i--) {
                BTNodeLeaf child = (BTNodeLeaf)children.get(i);
                int compare = word.compareTo(child.keys.get(0).key);
@@ -248,12 +227,9 @@ class BTNodeInternal extends BTNode
                   return child.searchWord(word);
                }
             }
-         }
          // if this line is reached, it must be in the left-most leaf node
          return children.get(0).searchWord(word);
-
       }
-
 
    }
 }
