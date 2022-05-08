@@ -207,29 +207,41 @@ class BTNodeInternal extends BTNode
    
    public Boolean searchWord(String word)
    {
-      if (children.get(0).getClass() == BTNodeInternal.class) { // child is internal. compare will not return 0.
-         for (int i = children.size() - 1; i >= 0; i--) {
-            BTNodeInternal child = (BTNodeInternal) children.get(i);
-            int compare = word.compareTo(child.indexWords.get(0));
-            if (compare > 0) { // if words exists, it's to the right of this node
-               return child.searchWord(word);
-            }
-         }
-         BTNodeInternal child = (BTNodeInternal) children.get(0);
-         return child.searchWord(word); // word is < all other children, must be in 0th child if it exists
-      }
 
-      else { // child is leaf node
-            for (int i = children.size() - 1; i >= 0; i--) {
-               BTNodeLeaf child = (BTNodeLeaf)children.get(i);
-               int compare = word.compareTo(child.keys.get(0).key);
-               if (compare >= 0) { // if words exists, it's IN this node
-                  return child.searchWord(word);
+//      if (children.get(0).getClass() == BTNodeInternal.class) { // child is internal. compare will not return 0.
+//         for (int i = children.size() - 1; i >= 0; i--) {
+//            BTNodeInternal child = (BTNodeInternal) children.get(i);
+//            int compare = word.compareTo(child.indexWords.get(i));
+//            if (compare > 0) { // if words exists, it's to the right of this node
+//               return child.searchWord(word);
+//            }
+//         }
+         if (word.compareTo(indexWords.get(indexWords.size()-1)) >= 0){
+            return children.get(children.size()-1).searchWord(word);
+         }
+         else {
+            for (int i = 0; i < indexWords.size(); i++) {
+               if (word.compareTo(indexWords.get(i)) < 0) {
+                  return children.get(i).searchWord(word);
                }
             }
-         // if this line is reached, it must be in the left-most leaf node
-         return children.get(0).searchWord(word);
-      }
-
+//         BTNodeInternal child = (BTNodeInternal) children.get(0);
+//         return child.searchWord(word); // word is < all other children, must be in 0th child if it exists
+//      }
+//
+//      else { // child is leaf node
+//            for (int i = children.size() - 1; i >= 0; i--) {
+//               BTNodeLeaf child = (BTNodeLeaf)children.get(i);
+//               int compare = word.compareTo(child.keys.get(0).key);
+//               if (compare >= 0) { // if words exists, it's IN this node
+//                  return child.searchWord(word);
+//               }
+//            }
+//         // if this line is reached, it must be in the left-most leaf node
+//         return children.get(0).searchWord(word);
+//      }
+            System.out.println("problem searchWord");
+            return false;
+         }
    }
 }

@@ -219,10 +219,9 @@ class BTNodeLeaf extends BTNode
    public Boolean searchWord(String word)
    {
       for (int i = 0; i < keys.size(); i++) {
-         if (keys.get(i).key.equals(word)){
+         if (keys.get(i).key.compareTo(word) == 0){
             return true;
          }
-         else return false;
       }
 
       return false;
