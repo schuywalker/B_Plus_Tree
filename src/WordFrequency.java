@@ -1,5 +1,11 @@
 /* CSCD 427 - Project 2 */
 
+/*
+Author: Schuyler Asplin
+Project 2 for CSCD 427 with Professor Dan Li
+Main method
+ */
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import java.io.*;

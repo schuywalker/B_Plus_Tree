@@ -1,6 +1,11 @@
 import java.util.Collections;
 import java.util.ArrayList;
 
+/*
+Author: Schuyler Asplin
+Project 2 for CSCD 427 with Professor Dan Li
+ */
+
 class BTNodeInternal extends BTNode
 {
    ArrayList<BTNode> children;
@@ -93,9 +98,8 @@ class BTNodeInternal extends BTNode
       if (this.parent == null) {
 
          // make parent, set IDs
-         BTNodeInternal newRoot = new BTNodeInternal(this.nodeID);
-         this.setNodeId((this.nodeID/2)-1);
-         BTNodeInternal rightSibling = new BTNodeInternal((this.nodeID*2)+1);
+         BTNodeInternal newRoot = new BTNodeInternal(tree.nodeIDAssigner++);
+         BTNodeInternal rightSibling = new BTNodeInternal(tree.nodeIDAssigner++);
 
          // set up parent/ child pointers
          this.parent = newRoot;
@@ -108,7 +112,7 @@ class BTNodeInternal extends BTNode
       }
       else {
          //create sibling
-         BTNodeInternal rightSibling = new BTNodeInternal((this.nodeID/2)+1);
+         BTNodeInternal rightSibling = new BTNodeInternal(tree.nodeIDAssigner++);
 
          // set parent and child pointers
          rightSibling.parent = this.parent;
@@ -164,7 +168,15 @@ class BTNodeInternal extends BTNode
 
          children.get(i+1).printStructureWKeys("");
 
-         System.out.print(" - "+nodeID+": "+indexWords.get(i)+"\n");
+         if (i == 0) {
+            System.out.print(" / "+nodeID+": "+indexWords.get(i)+"\n");
+         }
+         else if (i == indexWords.size()-1) {
+         System.out.print(" \\ "+nodeID+": "+indexWords.get(i)+"\n");
+         }
+         else {
+            System.out.print(" - "+nodeID+": "+indexWords.get(i)+"\n");
+         }
 
       }
 
@@ -173,11 +185,19 @@ class BTNodeInternal extends BTNode
       System.out.println("\n");
    }
    public void printStructureWKeys(String tabs){
-      tabs += "\t\t\t";
+      tabs += "\t\t";
       for (int i = indexWords.size()-1; i >= 0; i--) {
          children.get(i+1).printStructureWKeys(tabs);
 
+         if (i == indexWords.size()-1){
          System.out.print(tabs+" / "+nodeID+": "+indexWords.get(i)+"\n");
+         }
+         else if (i == 0) {
+            System.out.print(tabs+" \\ "+nodeID+": "+indexWords.get(i)+"\n");
+         }
+         else {
+            System.out.print(tabs+" - "+nodeID+": "+indexWords.get(i)+"\n");
+         }
       }
       children.get(0).printStructureWKeys(tabs);
    }
@@ -208,14 +228,6 @@ class BTNodeInternal extends BTNode
    public Boolean searchWord(String word)
    {
 
-//      if (children.get(0).getClass() == BTNodeInternal.class) { // child is internal. compare will not return 0.
-//         for (int i = children.size() - 1; i >= 0; i--) {
-//            BTNodeInternal child = (BTNodeInternal) children.get(i);
-//            int compare = word.compareTo(child.indexWords.get(i));
-//            if (compare > 0) { // if words exists, it's to the right of this node
-//               return child.searchWord(word);
-//            }
-//         }
          if (word.compareTo(indexWords.get(indexWords.size()-1)) >= 0){
             return children.get(children.size()-1).searchWord(word);
          }
@@ -225,21 +237,6 @@ class BTNodeInternal extends BTNode
                   return children.get(i).searchWord(word);
                }
             }
-//         BTNodeInternal child = (BTNodeInternal) children.get(0);
-//         return child.searchWord(word); // word is < all other children, must be in 0th child if it exists
-//      }
-//
-//      else { // child is leaf node
-//            for (int i = children.size() - 1; i >= 0; i--) {
-//               BTNodeLeaf child = (BTNodeLeaf)children.get(i);
-//               int compare = word.compareTo(child.keys.get(0).key);
-//               if (compare >= 0) { // if words exists, it's IN this node
-//                  return child.searchWord(word);
-//               }
-//            }
-//         // if this line is reached, it must be in the left-most leaf node
-//         return children.get(0).searchWord(word);
-//      }
             System.out.println("problem searchWord");
             return false;
          }

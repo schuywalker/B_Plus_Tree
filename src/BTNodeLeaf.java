@@ -1,6 +1,11 @@
 import java.util.Collections;
 import java.util.ArrayList;
 
+/*
+Author: Schuyler Asplin
+Project 2 for CSCD 427 with Professor Dan Li
+ */
+
 class BTNodeLeaf extends BTNode
 {
 //   ArrayList<Integer> keyCounts;
@@ -12,7 +17,12 @@ class BTNodeLeaf extends BTNode
    {
       keys = new ArrayList<Word>();
    }
-   
+   public BTNodeLeaf(int nodeID)
+   {
+      keys = new ArrayList<Word>();
+      this.nodeID = nodeID;
+   }
+
    public void insert(String word, BPlusTree tree)
    {
 
@@ -24,7 +34,6 @@ class BTNodeLeaf extends BTNode
 
       if (keys.size() == 0) {
          keys.add(new Word(word)); // add first word. only happens on first insert. can remove later for efficiency.
-         this.setNodeId(tree.wordCount / 2);
       }
       else if(word.compareTo(keys.get(keys.size()-1).getKey()) > 0) {
          keys.add(new Word(word)); // add to end
@@ -58,19 +67,16 @@ class BTNodeLeaf extends BTNode
          if (this.parent == null) { // only occurs on first split
 
             // make parent and sibling
-            BTNodeInternal newRoot = new BTNodeInternal(this.nodeID);
-            BTNodeLeaf rightLeaf = new BTNodeLeaf();
+            BTNodeInternal newRoot = new BTNodeInternal(tree.nodeIDAssigner++);
+
+            BTNodeLeaf rightLeaf = new BTNodeLeaf(tree.nodeIDAssigner++);
+
 
             // parent / child pointers
             newRoot.children.add(this);
             newRoot.children.add(rightLeaf);
             this.parent = newRoot;
             rightLeaf.parent = newRoot;
-
-            // set IDs - needs work!!!!!!!!!!!!!!!!!!!!!
-            this.setNodeId(this.nodeID/2);
-            rightLeaf.setNodeId(parent.nodeID - this.nodeID);
-
 
             // split calls copy up
             this.split(splitPoint, rightLeaf, tree);
@@ -79,7 +85,7 @@ class BTNodeLeaf extends BTNode
          else { // parent is not null - called every time after first
 
             // create right node to split to
-            BTNodeLeaf rightLeaf = new BTNodeLeaf();
+            BTNodeLeaf rightLeaf = new BTNodeLeaf(tree.nodeIDAssigner++);
             rightLeaf.parent = this.parent;
 
             /*
@@ -152,14 +158,6 @@ class BTNodeLeaf extends BTNode
    }
    public void printStructureWKeys(String tabs)
    {
-
-      // uncomment to print nextLeaf's
-//      if (this.nextLeaf == null) {
-//         System.out.println("\t\t\t\t\t\tnext is null");
-//      }
-//      else {
-//      System.out.println("\t\t\t\t\t\tnext 0th is " + this.nextLeaf.keys.get(0).key);
-//      }
 
       tabs += "\t\t";
       for (int i = keys.size()-1; i >= 0; i--){

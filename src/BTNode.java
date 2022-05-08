@@ -1,5 +1,10 @@
 import java.util.ArrayList;
 
+/*
+Author: Schuyler Asplin
+Project 2 for CSCD 427 with Professor Dan Li
+ */
+
 abstract class BTNode
 {
    protected int nodeID;
@@ -19,9 +24,9 @@ abstract class BTNode
    
    public abstract Boolean searchWord(String word);
 
-   public void setNodeId(int nodeId){
-      this.nodeID = nodeId;
-   }
+//   public void setNodeId(int nodeId){
+//      this.nodeID = nodeId;
+//   }
 }
 /* INSERTION
 • Find correct leaf page L.

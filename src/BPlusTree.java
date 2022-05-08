@@ -1,5 +1,10 @@
 import java.util.*;
 
+/*
+Author: Schuyler Asplin
+Project 2 for CSCD 427 with Professor Dan Li
+ */
+
 class BPlusTree
 {
    BTNode root;
@@ -7,10 +12,11 @@ class BPlusTree
    private final Set ignoreTable;
    public final int n = 3;
    public int wordCount = 0;
+   public int nodeIDAssigner = 0;
    
    public BPlusTree(Set ignoreSet)
    {
-      root = new BTNodeLeaf();
+      root = new BTNodeLeaf(this.nodeIDAssigner++);
       nextNodeID = 1;
       ignoreTable = ignoreSet;
    }
